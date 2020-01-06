@@ -5,18 +5,56 @@ from tkinter import messagebox
 
 from quizBackend import QuizBackend, QuizOverException
 
+class QuestionFrame(tk.Frame):
+    def __init__(self, master=None, selectedVar=None):
+        super().__init__(master)
+        self.master = master
+        if selectedVar:
+            self.selectedVar = selectedVar
+        else:
+            self.selectedVar = tk.IntVar()
+
+    def setQuestion(self, question):
+        self.question = question
+
+    def setAnswers(self, answers):
+        self.answers = answers
+
+    def populateQuestion(self):
+        tk.Label(self,
+            text = self.question
+        ).pack()
+        for i, ans in enumerate(self.answers):
+            tk.Radiobutton(
+                self,
+                text=ans,
+                variable=self.selectedVar,
+                value=i,
+                indicatoron=0
+            ).pack()
+
+
 class Quiz(tk.Frame):
     def __init__(self, master, backend):
         super().__init__(master)
         self.master = master
         self.backend = backend
-        self.questionFrame = None
+        self.selectedVar = tk.IntVar()
+        self.questionFrame = QuestionFrame(master=self, selectedVar=self.selectedVar)
         self.populateWindow()
         self.master.title("Quiz")
         self.pack()
 
     def populateWindow(self):
-        self.getQuestionFrame()
+
+        self.questionFrame.setQuestion(
+            self.backend.getQuestion()
+        )
+        self.questionFrame.setAnswers(
+            self.backend.getAnswers()
+        )
+        self.questionFrame.populateQuestion()
+        self.questionFrame.pack()
 
         # Submit Button
         tk.Button(
@@ -31,24 +69,9 @@ class Quiz(tk.Frame):
             command=self.master.destroy
         ).pack()
 
-    def getQuestionFrame(self):
-        self.questionFrame = tk.Frame(self)
-        self.answerSelectedIndex = tk.IntVar()
-        tk.Label(self.questionFrame,
-            text = self.backend.getQuestion()
-        ).pack()
-        for i, ans in enumerate(self.backend.getAnswers()):
-            tk.Radiobutton(
-                self.questionFrame,
-                text=ans,
-                variable=self.answerSelectedIndex,
-                value=i,
-                indicatoron=0
-            ).pack()
-        self.questionFrame.pack()
 
     def submitAnswer(self):
-        answerIndex = self.answerSelectedIndex.get()
+        answerIndex = self.selectedVar.get()
         print(f"Selected answer index: {answerIndex}")
         correct = self.backend.checkAnswerByIndex(answerIndex)
         if correct:
