@@ -20,7 +20,7 @@ class QuizBackend():
         else:
             import yaml
             with open(file, 'r') as stream:
-                self.quesitons = yaml.load(stream, loader=yaml.SafeLoader)
+                self.questions = yaml.load(stream)
 
         self.num_questions = len(self.questions)
         self.active_question_num = 0

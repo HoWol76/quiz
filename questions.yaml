@@ -1,0 +1,34 @@
+- question: What is the square root of 81?
+  answers:
+    - "9"
+    - "12"
+    - "8"
+    - "39"
+  correct: "9"
+- question: On which continent is Brazil?
+  answers:
+    - Eurasia
+    - North America
+    - South America
+  correct: South America
+- question: Which company is not associated with Elon Musk?
+  answers:
+    - SpaceX
+    - Boring company
+    - Virgin Galactic
+    - Tesla
+  correct: Virgin Galactic
+- question: Who played Mal in the TV Series Firefly?
+  answers:
+    - Alan Tudyk
+    - Nathan Fillion
+    - Adam Baldwin
+    - Sean Maher
+  correct: Nathan Fillion
+- question: Which artist released the Album 1984?
+  answers:
+    - Rhianna
+    - Beyonce
+    - Taylor Swift
+    - Elton John
+  correct: Taylor Swift

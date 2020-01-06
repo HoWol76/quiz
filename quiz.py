@@ -100,6 +100,6 @@ class Quiz(tk.Frame):
 if __name__ == '__main__':
     root = tk.Tk()
     root.title("Quiz")
-    backend = QuizBackend()
+    backend = QuizBackend(file='questions.yaml')
     quiz = Quiz(master=root, backend=backend)
     quiz.mainloop()
