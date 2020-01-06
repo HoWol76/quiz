@@ -32,7 +32,8 @@ class QuestionFrame(tk.Frame):
                 text=ans,
                 variable=self.selectedVar,
                 value=i,
-                indicatoron=0
+                indicatoron=0,
+                command=self.master.submitAnswer
             ).grid(column=1, row=i+1, sticky=[tk.W, tk.E])
 
     def getSelectedVar(self):
@@ -94,10 +95,8 @@ class Quiz(tk.Frame):
             self.populateQuestionFrame()
         except QuizOverException:
             totals = backend.getTotals()
-            messagebox.showinfo(message=f"""
-            The quiz is over. Thank you.
-            You got {totals['correct']} of {totals['total']}
-            """)
+            messagebox.showinfo(message=f"""The quiz is over. Thank you.
+You got {totals['correct']} of {totals['total']}""")
             self.master.destroy()
 
 
