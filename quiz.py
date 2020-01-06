@@ -6,8 +6,8 @@ from tkinter import messagebox
 from quizBackend import QuizBackend, QuizOverException
 
 class QuestionFrame(tk.Frame):
-    def __init__(self, master=None, selectedVar=None):
-        super().__init__(master)
+    def __init__(self, master=None, selectedVar=None, *args, **kwargs):
+        super().__init__(master, *args, **kwargs)
         self.master = master
         if selectedVar:
             self.selectedVar = selectedVar
@@ -23,7 +23,7 @@ class QuestionFrame(tk.Frame):
     def populateQuestion(self):
         tk.Label(self,
             text = self.question
-        ).pack()
+        ).grid()
         for i, ans in enumerate(self.answers):
             tk.Radiobutton(
                 self,
@@ -31,19 +31,22 @@ class QuestionFrame(tk.Frame):
                 variable=self.selectedVar,
                 value=i,
                 indicatoron=0
-            ).pack()
+            ).grid()
+
+    def getSelectedVar(self):
+        return self.selectedVar
 
 
 class Quiz(tk.Frame):
-    def __init__(self, master, backend):
-        super().__init__(master)
+    def __init__(self, master, backend, *args, **kwargs):
+        super().__init__(master, *args, **kwargs)
         self.master = master
         self.backend = backend
         self.selectedVar = tk.IntVar()
         self.questionFrame = QuestionFrame(master=self, selectedVar=self.selectedVar)
         self.populateWindow()
         self.master.title("Quiz")
-        self.pack()
+        self.grid()
 
     def populateWindow(self):
 
@@ -54,21 +57,20 @@ class Quiz(tk.Frame):
             self.backend.getAnswers()
         )
         self.questionFrame.populateQuestion()
-        self.questionFrame.pack()
+        self.questionFrame.grid()
 
         # Submit Button
         tk.Button(
             self,
             text="Submit", bg="green",
             command=self.submitAnswer
-        ).pack()
+        ).grid()
         # Quit Button
         tk.Button(
             self,
             text="Quit", bg="red",
             command=self.master.destroy
-        ).pack()
-
+        ).grid()
 
     def submitAnswer(self):
         answerIndex = self.selectedVar.get()
@@ -80,11 +82,19 @@ class Quiz(tk.Frame):
             messagebox.showinfo(message="Unfortunately not")
         try:
             self.backend.nextQuestion()
+            self.questionFrame.destroy()
+            self.questionFrame = QuestionFrame(master=self, selectedVar = self.selectedVar)
+            self.questionFrame.setQuestion(
+                self.backend.getQuestion()
+            )
+            self.questionFrame.setAnswers(
+                self.backend.getAnswers()
+            )
+            self.questionFrame.populateQuestion()
+            self.questionFrame.grid()
         except QuizOverException:
             messagebox.showinfo(message="The quiz is over. Thank you.")
             self.master.destroy()
-
-
 
 
 if __name__ == '__main__':

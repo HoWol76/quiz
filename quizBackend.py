@@ -1,9 +1,9 @@
 class QuizOverException(Exception):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 class QuizBackend():
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         self.questions = [
             {
                 'question': "What is 2+2",
@@ -13,7 +13,7 @@ class QuizBackend():
             {
                 'question': "Who develops Minecraft",
                 'answers': ["Konami", "Mojang", "Blizzard", "EA"],
-                'correct': 3
+                'correct': 1
             },
         ]
         self.num_questions = len(self.questions)
