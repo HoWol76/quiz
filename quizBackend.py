@@ -3,19 +3,25 @@ class QuizOverException(Exception):
         super().__init__(*args, **kwargs)
 
 class QuizBackend():
-    def __init__(self, *args, **kwargs):
-        self.questions = [
-            {
-                'question': "What is 2+2",
-                'answers': ["1", "2", "3", "4"],
-                'correct': 3
-            },
-            {
-                'question': "Who develops Minecraft",
-                'answers': ["Konami", "Mojang", "Blizzard", "EA"],
-                'correct': 1
-            },
-        ]
+    def __init__(self, file=None, *args, **kwargs):
+        if not file:
+            self.questions = [
+                {
+                    'question': "What is 2+2",
+                    'answers': ["1", "2", "3", "4"],
+                    'correct': "4"
+                },
+                {
+                    'question': "Who develops Minecraft",
+                    'answers': ["Konami", "Mojang", "Blizzard", "EA"],
+                    'correct': "Mojang"
+                },
+            ]
+        else:
+            import yaml
+            with open(file, 'r') as stream:
+                self.quesitons = yaml.load(stream, loader=yaml.SafeLoader)
+
         self.num_questions = len(self.questions)
         self.active_question_num = 0
         self.active_question = self.questions[self.active_question_num]
@@ -27,12 +33,7 @@ class QuizBackend():
         return self.active_question['answers']
 
     def checkAnswerByString(self, answer):
-        return answer == self.active_question['answers'][
-            self.active_question['correct']
-        ]
-
-    def checkAnswerByIndex(self, answerIndex):
-        return answerIndex == self.active_question['correct']
+        return answer == self.active_question['correct']
 
     def nextQuestion(self):
         self.active_question_num = self.active_question_num + 1

@@ -83,7 +83,7 @@ class Quiz(tk.Frame):
 
     def submitAnswer(self):
         answerIndex = self.selectedVar.get()
-        correct = self.backend.checkAnswerByIndex(answerIndex)
+        correct = self.backend.checkAnswerByString(backend.getAnswers()[answerIndex])
         if correct:
             messagebox.showinfo(message="Correct!")
         else:
