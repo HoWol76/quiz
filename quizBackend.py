@@ -4,22 +4,38 @@ class QuizOverException(Exception):
 
 class QuizBackend():
     def __init__(self):
-        self.num_questions = 1
-        self.active_question = 0
+        self.questions = [
+            {
+                'question': "What is 2+2",
+                'answers': ["1", "2", "3", "4"],
+                'correct': 3
+            },
+            {
+                'question': "Who develops Minecraft",
+                'answers': ["Konami", "Mojang", "Blizzard", "EA"],
+                'correct': 3
+            },
+        ]
+        self.num_questions = len(self.questions)
+        self.active_question_num = 0
+        self.active_question = self.questions[self.active_question_num]
 
     def getQuestion(self):
-        return "What is 2+2"
+        return self.active_question['question']
 
     def getAnswers(self):
-        return [str(i) for i in range(1, 5)]
+        return self.active_question['answers']
 
     def checkAnswerByString(self, answer):
-        return answer == "4"
+        return answer == self.active_question['answers'][
+            self.active_question['correct']
+        ]
 
     def checkAnswerByIndex(self, answerIndex):
-        return answerIndex == 3
+        return answerIndex == self.active_question['correct']
 
     def nextQuestion(self):
-        self.active_question = self.active_question + 1
-        if self.active_question >= self.num_questions:
+        self.active_question_num = self.active_question_num + 1
+        if self.active_question_num >= self.num_questions:
             raise QuizOverException()
+        self.active_question = self.questions[self.active_question_num]

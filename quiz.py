@@ -45,6 +45,7 @@ class Quiz(tk.Frame):
                 value=i,
                 indicatoron=0
             ).pack()
+        self.questionFrame.pack()
 
     def submitAnswer(self):
         answerIndex = self.answerSelectedIndex.get()
