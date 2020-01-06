@@ -17,7 +17,7 @@ class QuizBackend():
         return answer == "4"
 
     def checkAnswerByIndex(self, answerIndex):
-        return answer == 3
+        return answerIndex == 3
 
     def nextQuestion(self):
         self.active_question = self.active_question + 1
