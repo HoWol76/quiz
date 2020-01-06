@@ -21,9 +21,11 @@ class QuizBackend():
             import yaml
             with open(file, 'r') as stream:
                 self.questions = yaml.load(stream)
+        self.answeredCorrectly = False
 
         self.num_questions = len(self.questions)
         self.active_question_num = 0
+        self.num_answeredCorrectly = 0
         self.active_question = self.questions[self.active_question_num]
 
     def getQuestion(self):
@@ -33,10 +35,20 @@ class QuizBackend():
         return self.active_question['answers']
 
     def checkAnswerByString(self, answer):
-        return answer == self.active_question['correct']
+        self.answeredCorrectly = (answer == self.active_question['correct'])
+        return self.answeredCorrectly
 
     def nextQuestion(self):
         self.active_question_num = self.active_question_num + 1
+        if self.answeredCorrectly:
+            self.num_answeredCorrectly = self.num_answeredCorrectly+1
         if self.active_question_num >= self.num_questions:
             raise QuizOverException()
         self.active_question = self.questions[self.active_question_num]
+
+    def getTotals(self):
+        return {
+            'correct': self.num_answeredCorrectly,
+            'asked': self.active_question_num,
+            'total': self.num_questions
+        }

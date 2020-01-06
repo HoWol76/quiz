@@ -93,7 +93,11 @@ class Quiz(tk.Frame):
             self.questionFrame.destroy()
             self.populateQuestionFrame()
         except QuizOverException:
-            messagebox.showinfo(message="The quiz is over. Thank you.")
+            totals = backend.getTotals()
+            messagebox.showinfo(message=f"""
+            The quiz is over. Thank you.
+            You got {totals['correct']} of {totals['total']}
+            """)
             self.master.destroy()
 
 
