@@ -3,8 +3,8 @@ class QuizOverException(Exception):
         super().__init__()
 
 class QuizBackend():
-    def __init__(self, frontend):
-        self.frontend = frontend
+    def __init__(self):
+        pass
 
     def getQuestion(self):
         return "What is 2+2"
