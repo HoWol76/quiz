@@ -1,3 +1,7 @@
+class QuizOverException(Exception):
+    def __init__(self):
+        super().__init__()
+
 class QuizBackend():
     def __init__(self, frontend):
         self.frontend = frontend
@@ -13,3 +17,6 @@ class QuizBackend():
 
     def checkAnswerByIndex(self, answerIndex):
         return answer == 3
+
+    def nextQuestion(self):
+        raise QuizOverException()
