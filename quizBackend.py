@@ -1,6 +1,10 @@
+from random import shuffle
+
+
 class QuizOverException(Exception):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
 
 class QuizBackend():
     def __init__(self, file=None, *args, **kwargs):
@@ -32,9 +36,12 @@ class QuizBackend():
         return self.active_question['question']
 
     def getAnswers(self):
+        self.answers = self.active_question['answers']
+        shuffle(self.answers)
         return self.active_question['answers']
 
     def checkAnswerByString(self, answer):
+        print(f"Selected answer: {answer}")
         self.answeredCorrectly = (answer == self.active_question['correct'])
         return self.answeredCorrectly
 

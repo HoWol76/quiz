@@ -76,15 +76,14 @@ class Quiz(tk.Frame):
         self.questionFrame.setQuestion(
             self.backend.getQuestion()
         )
-        self.questionFrame.setAnswers(
-            self.backend.getAnswers()
-        )
+        self.answers = self.backend.getAnswers()
+        self.questionFrame.setAnswers(self.answers)
         self.questionFrame.populateQuestion()
         self.questionFrame.grid(row=0, columnspan=2, sticky=[tk.W, tk.E])
 
     def submitAnswer(self):
         answerIndex = self.selectedVar.get()
-        correct = self.backend.checkAnswerByString(backend.getAnswers()[answerIndex])
+        correct = self.backend.checkAnswerByString(self.answers[answerIndex])
         if correct:
             messagebox.showinfo(message="Correct!")
         else:
