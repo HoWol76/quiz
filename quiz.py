@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 import tkinter as tk
+from tkinter import font as tkfont
 from tkinter import messagebox
-
 from quizBackend import QuizBackend, QuizOverException
 
 class QuestionFrame(tk.Frame):
@@ -45,6 +45,8 @@ class Quiz(tk.Frame):
         super().__init__(master, *args, **kwargs)
         self.master = master
         self.backend = backend
+        self.defaultFont = tkfont.nametofont('TkDefaultFont')
+        self.defaultFont.configure(size=16)
         self.selectedVar = tk.IntVar()
         self.populateWindow()
         self.master.title("Quiz")
@@ -93,7 +95,7 @@ class Quiz(tk.Frame):
             self.questionFrame.destroy()
             self.populateQuestionFrame()
         except QuizOverException:
-            totals = backend.getTotals()
+            totals = self.backend.getTotals()
             messagebox.showinfo(message=f"The quiz is over. Thank you.\nYou got {totals['correct']} of {totals['total']}")
             self.master.destroy()
 
