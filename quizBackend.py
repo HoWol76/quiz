@@ -33,9 +33,17 @@ class QuizBackend():
         self.__active_question = self.__questions[self.__active_question_num]
 
     def getQuestion(self):
+        """(None) -> str
+
+        Returns the current question text.
+        """
         return self.__active_question['question']
 
     def getAnswers(self):
+        """(None) -> list of str
+
+        Returns a shuffled list of answers for the current question
+        """
         self.__answers = self.__active_question['answers']
         shuffle(self.__answers)
         self.__correctAnswerIndex = self.__answers.index(self.__active_question['correct'])
@@ -69,6 +77,14 @@ class QuizBackend():
         return self.__answeredCorrectly
 
     def nextQuestion(self):
+        """(None) -> None
+
+        Activates the next question
+
+        Checks whether the last question was answered correctly by the *last*
+        call to /checkAnswerByIndex/ or /checkAnswerByString/. If it was, it will
+        increment the tally of questions answered correctly.
+        """
         self.__active_question_num = self.__active_question_num + 1
         if self.__answeredCorrectly:
             self.__num_answeredCorrectly = self.__num_answeredCorrectly+1
@@ -77,6 +93,15 @@ class QuizBackend():
         self.__active_question = self.__questions[self.__active_question_num]
 
     def getTotals(self):
+        """(None) -> dict of {str: int}
+
+        Returns a dictionary of totals:
+
+            key   |  value
+        "correct" |  Number of correct answers
+        "asked"   |  Number of questions asked so far
+        "total"   |  Number of question in this quiz
+        """
         return {
             'correct': self.__num_answeredCorrectly,
             'asked': self.__active_question_num,
