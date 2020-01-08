@@ -9,7 +9,7 @@ class QuizOverException(Exception):
 class QuizBackend():
     def __init__(self, file=None, *args, **kwargs):
         if not file:
-            self.questions = [
+            self.__questions = [
                 {
                     'question': "What is 2+2",
                     'answers': ["1", "2", "3", "4"],
@@ -24,44 +24,61 @@ class QuizBackend():
         else:
             import yaml
             with open(file, 'r') as stream:
-                self.questions = yaml.load(stream)
-        self.answeredCorrectly = False
+                self.__questions = yaml.load(stream)
+        self.__answeredCorrectly = False
 
-        self.num_questions = len(self.questions)
-        self.active_question_num = 0
-        self.num_answeredCorrectly = 0
-        self.active_question = self.questions[self.active_question_num]
+        self.__num_questions = len(self.__questions)
+        self.__active_question_num = 0
+        self.__num_answeredCorrectly = 0
+        self.__active_question = self.__questions[self.__active_question_num]
 
     def getQuestion(self):
-        return self.active_question['question']
+        return self.__active_question['question']
 
     def getAnswers(self):
-        self.answers = self.active_question['answers']
-        shuffle(self.answers)
-        self.correctAnswerIndex = self.answers.index(self.active_question['correct'])
-        return self.active_question['answers']
+        self.__answers = self.__active_question['answers']
+        shuffle(self.__answers)
+        self.__correctAnswerIndex = self.__answers.index(self.__active_question['correct'])
+        return self.__active_question['answers']
 
     def checkAnswerByString(self, answer):
-        print(f"Selected answer: {answer}")
-        self.answeredCorrectly = (answer == self.active_question['correct'])
-        return self.answeredCorrectly
+        """(str) -> bool
+
+        Returns True if answer contains the correct answer for the current question.
+
+        Side-Effect: Next time /nextQuestion/ is called,
+        it will count the question answered correctly if the last
+        checkAnswer (either by String or by Index) was correct.
+        """
+        # print(f"Selected answer: {answer}")
+        self.__answeredCorrectly = (answer == self.__active_question['correct'])
+        return self.__answeredCorrectly
 
     def checkAnswerByIndex(self, answerIndex):
-        print(f"Selected answer: {self.answers[answerIndex]}")
-        self.answeredCorrectly = (answerIndex == self.correctAnswerIndex)
-        return self.answeredCorrectly
+        """(int) -> bool
+
+        Returns True if answerIndex contains the index of the correct answer
+        in the list last given when /getAnswers/ was called.
+
+        Side-Effect: Next time /nextQuestion/ is called,
+        it will count the question answered correctly if the last
+        checkAnswer (either by String or by Index) was correct.
+        """
+        # print(f"Selected answer: {self.__answers[answerIndex]}")
+        self.__answeredCorrectly = (answerIndex == self.__correctAnswerIndex)
+        return self.__answeredCorrectly
 
     def nextQuestion(self):
-        self.active_question_num = self.active_question_num + 1
-        if self.answeredCorrectly:
-            self.num_answeredCorrectly = self.num_answeredCorrectly+1
-        if self.active_question_num >= self.num_questions:
+        self.__active_question_num = self.__active_question_num + 1
+        if self.__answeredCorrectly:
+            self.__num_answeredCorrectly = self.__num_answeredCorrectly+1
+        if self.__active_question_num >= self.__num_questions:
             raise QuizOverException()
-        self.active_question = self.questions[self.active_question_num]
+        self.__active_question = self.__questions[self.__active_question_num]
 
     def getTotals(self):
         return {
-            'correct': self.num_answeredCorrectly,
-            'asked': self.active_question_num,
-            'total': self.num_questions
+            'correct': self.__num_answeredCorrectly,
+            'asked': self.__active_question_num,
+            'total': self.__num_questions
         }
