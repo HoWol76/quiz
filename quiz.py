@@ -99,9 +99,48 @@ You got {totals['correct']} of {totals['total']}""")
             self.master.destroy()
 
 
+class QuizCMD():
+
+    def __init__(self, backend):
+        self.__backend = backend
+
+    def mainloop(self):
+        from string import ascii_letters as letters
+        while True:
+            print(backend.getQuestion())
+            answers = {l: a for l, a in zip(letters, backend.getAnswers())}
+            for l, a in answers.items():
+                print(f" {l}) {a}")
+            answerGiven = input(f"Please enter answer {list(answers.keys())}")
+            if backend.checkAnswerByString(answers[answerGiven]):
+                print("Correct!")
+            else:
+                print("No, Sorry")
+            try:
+                backend.nextQuestion()
+            except QuizOverException:
+                break
+
+        totals = self.__backend.getTotals()
+        print(f"You got {totals['correct']} of {totals['total']} questions right.")
+
+
 if __name__ == '__main__':
-    root = tk.Tk()
-    root.title("Quiz")
     backend = QuizBackend(file='questions.yaml')
-    quiz = Quiz(master=root, backend=backend)
+
+    # Check for Tcl/Tk availability
+    try:
+        root = tk.Tk()
+        tkAvailable = True
+    except tk.TclError:
+        tkAvailable = False
+
+    # Select correct User Interface
+    if tkAvailable:
+        root.title("Quiz")
+        quiz = Quiz(master=root, backend=backend)
+    else:
+        quiz = QuizCMD(backend=backend)
+
+    # Run the quiz
     quiz.mainloop()
