@@ -94,8 +94,7 @@ class Quiz(tk.Frame):
             self.populateQuestionFrame()
         except QuizOverException:
             totals = backend.getTotals()
-            messagebox.showinfo(message=f"""The quiz is over. Thank you.
-You got {totals['correct']} of {totals['total']}""")
+            messagebox.showinfo(message=f"The quiz is over. Thank you.\nYou got {totals['correct']} of {totals['total']}")
             self.master.destroy()
 
 
@@ -125,7 +124,7 @@ class QuizCMD():
         print(f"You got {totals['correct']} of {totals['total']} questions right.")
 
 
-if __name__ == '__main__':
+def main():
     backend = QuizBackend(file='questions.yaml')
 
     # Check for Tcl/Tk availability
@@ -144,3 +143,7 @@ if __name__ == '__main__':
 
     # Run the quiz
     quiz.mainloop()
+
+
+if __name__ == '__main__':
+    main()
