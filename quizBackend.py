@@ -38,11 +38,17 @@ class QuizBackend():
     def getAnswers(self):
         self.answers = self.active_question['answers']
         shuffle(self.answers)
+        self.correctAnswerIndex = self.answers.index(self.active_question['correct'])
         return self.active_question['answers']
 
     def checkAnswerByString(self, answer):
         print(f"Selected answer: {answer}")
         self.answeredCorrectly = (answer == self.active_question['correct'])
+        return self.answeredCorrectly
+
+    def checkAnswerByIndex(self, answerIndex):
+        print(f"Selected answer: {self.answers[answerIndex]}")
+        self.answeredCorrectly = (answerIndex == self.correctAnswerIndex)
         return self.answeredCorrectly
 
     def nextQuestion(self):
